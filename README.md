@@ -1,3 +1,71 @@
+# The hiking wheelchair (working title)
+
+## Context
+Most people walk in their day-to-day lives. To work, school, to a restaurant with some friends, or just to your friend’s desk a few steps over. As we think about it, walking is a purely functional endeavour, design to get you from A to B in the quickest, most efficient way. There is however another way of walking, one that more and more people are practicing every day. One where the important matter is not the destination but the journey: **hiking**.
+
+Hiking is an enjoyable activity with both physical and mental benefits. Hiking outdoors is a stimulating activity that helps decreasing stress levels and increase creativity and happiness. But we want not for these benefits to be limited by the ability to walk. People who have movement disabilities and are wheelchair-bound nevertheless do have the ability to enjoy journeys through nature. With our project, we want to contribute to **make hiking more enjoyable and safe for these wheelchair-bound people, without the need to be accompanied by an able-bodied person**.
+
+## Sensors
+
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><p>Sensor</p></th>
+<th><p>Resulting variable(s)</p></th>
+<th><p>Possible uses</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><p>GPS tracker</p></td>
+<td><p>Latitude and longitude coordinates.</p></td>
+<td><ul>
+<li>Plan the hiking trail and make sure to follow a wheelchair accessible path</li>
+<li>Track your results and progress in terms of distance and speed</li>
+<li>Link data gathered through the other sensors with locations for later use (feedback or sharing with other users)</li>
+</ul></td>
+</tr>
+<tr class="even">
+<td><p>Heart rate sensor</p></td>
+<td><p>Beats per minute.</p></td>
+<td><ul>
+<li>Keep track of your effort and fitness level</li>
+<li>Gather data on the most intense parts of the path</li>
+</ul></td>
+</tr>
+<tr class="odd">
+<td><p>Accelerometer</p></td>
+<td><p>Accelerations in 3 axes</p></td>
+<td><ul>
+<li>Detect falls and other sudden impacts which might have had an effect on the wheelchair user.</li>
+</ul></td>
+</tr>
+<tr class="even">
+<td><p>Gyroscope</p></td>
+<td><p>Rotation in 3 axes</p></td>
+<td><ul>
+<li>Detect inclination and required balance in uneven stretches of the path.</li>
+</ul></td>
+</tr>
+<tr class="odd">
+<td><p>Humidity</p></td>
+<td><p>Percentage of water content on a surface</p></td>
+<td><ul>
+<li>Measure water loss</li>
+</ul></td>
+</tr>
+</tbody>
+</table>
+
+
+---
+
+# Wheelchair Design Platform
 
 Wheelchair Design Platform is a repository that contains some resources to help
 designers and developers speak the same language, and work together towards
