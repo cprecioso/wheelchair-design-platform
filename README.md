@@ -90,7 +90,7 @@ Hiking is an enjoyable activity with both physical and mental benefits. Hiking o
           <li>
             Show the current state of the user in the
             <a
-              href="https://customercare.g%20eonaute.com/hc/en-gb/articles/205%20822622-WHAT-DO-THE-COLOUR-CARDIO-%20ZONES-MEAN-"
+              href="https://customercare.geonaute.com/hc/en-gb/articles/205822622-WHAT-DO-THE-COLOUR-CARDIO-ZONES-MEAN-"
               >cardio chart</a
             >
           </li>
