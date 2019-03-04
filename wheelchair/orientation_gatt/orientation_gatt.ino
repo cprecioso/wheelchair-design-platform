@@ -26,7 +26,7 @@
 #include "BluefruitConfig.h"
 
 #if SOFTWARE_SERIAL_AVAILABLE
-  #include <SoftwareSerial.h>
+#include <SoftwareSerial.h>
 #endif
 
 // Create the bluefruit object, either software serial...uncomment these lines
@@ -48,11 +48,12 @@ Adafruit_BluefruitLE_SPI ble(BLUEFRUIT_SPI_CS, BLUEFRUIT_SPI_IRQ, BLUEFRUIT_SPI_
 //                             BLUEFRUIT_SPI_MOSI, BLUEFRUIT_SPI_CS,
 //                             BLUEFRUIT_SPI_IRQ, BLUEFRUIT_SPI_RST);
 
-
 // A small helper
-void error(const __FlashStringHelper*err) {
+void error(const __FlashStringHelper *err)
+{
   Serial.println(err);
-  while (1);
+  while (1)
+    ;
 }
 
 /* The service information */
@@ -68,7 +69,8 @@ int32_t hrmLocationCharId;
 /**************************************************************************/
 void setup(void)
 {
-  while (!Serial); // required for Flora & Micro
+  while (!Serial)
+    ; // required for Flora & Micro
   delay(500);
 
   boolean success;
@@ -82,16 +84,17 @@ void setup(void)
   /* Initialise the module */
   Serial.print(F("Initialising the Bluefruit LE module: "));
 
-  if ( !ble.begin(VERBOSE_MODE) )
+  if (!ble.begin(VERBOSE_MODE))
   {
     error(F("Couldn't find Bluefruit, make sure it's in CoMmanD mode & check wiring?"));
   }
-  Serial.println( F("OK!") );
+  Serial.println(F("OK!"));
 
   /* Perform a factory reset to make sure everything is in a known state */
   Serial.println(F("Performing a factory reset: "));
-  if (! ble.factoryReset() ){
-       error(F("Couldn't factory reset"));
+  if (!ble.factoryReset())
+  {
+    error(F("Couldn't factory reset"));
   }
 
   /* Disable command echo from Bluefruit */
@@ -108,37 +111,41 @@ void setup(void)
   /* Change the device name to make it easier to find */
   Serial.println(F("Setting device name to 'MartiTooth': "));
 
-  if (! ble.sendCommandCheckOK(F("AT+GAPDEVNAME=MartiTooth")) ) {
+  if (!ble.sendCommandCheckOK(F("AT+GAPDEVNAME=MartiTooth")))
+  {
     error(F("Could not set device name?"));
   }
 
   /* Add the Heart Rate Service definition */
   /* Service ID should be 1 */
   Serial.println(F("Adding the Heart Rate Service definition (UUID = 0x180D): "));
-  success = ble.sendCommandWithIntReply( F("AT+GATTADDSERVICE=UUID=0x180D"), &hrmServiceId);
-  if (! success) {
+  success = ble.sendCommandWithIntReply(F("AT+GATTADDSERVICE=UUID=0x180D"), &hrmServiceId);
+  if (!success)
+  {
     error(F("Could not add HRM service"));
   }
 
   /* Add the Heart Rate Measurement characteristic */
   /* Chars ID for Measurement should be 1 */
   Serial.println(F("Adding the Heart Rate Measurement characteristic (UUID = 0x2A37): "));
-  success = ble.sendCommandWithIntReply( F("AT+GATTADDCHAR=UUID=0x2A37, PROPERTIES=0x10, MIN_LEN=2, MAX_LEN=3, VALUE=00-40"), &hrmMeasureCharId);
-    if (! success) {
+  success = ble.sendCommandWithIntReply(F("AT+GATTADDCHAR=UUID=0x2A37, PROPERTIES=0x10, MIN_LEN=2, MAX_LEN=3, VALUE=00-40"), &hrmMeasureCharId);
+  if (!success)
+  {
     error(F("Could not add HRM characteristic"));
   }
 
   /* Add the Body Sensor Location characteristic */
   /* Chars ID for Body should be 2 */
   Serial.println(F("Adding the Body Sensor Location characteristic (UUID = 0x2A38): "));
-  success = ble.sendCommandWithIntReply( F("AT+GATTADDCHAR=UUID=0x2A38, PROPERTIES=0x02, MIN_LEN=1, VALUE=3"), &hrmLocationCharId);
-    if (! success) {
+  success = ble.sendCommandWithIntReply(F("AT+GATTADDCHAR=UUID=0x2A38, PROPERTIES=0x02, MIN_LEN=1, VALUE=3"), &hrmLocationCharId);
+  if (!success)
+  {
     error(F("Could not add BSL characteristic"));
   }
 
   /* Add the Heart Rate Service to the advertising data (needed for Nordic apps to detect the service) */
   Serial.print(F("Adding Heart Rate Service UUID to the advertising payload: "));
-  ble.sendCommandCheckOK( F("AT+GAPSETADVDATA=02-01-06-05-02-0d-18-0a-18") );
+  ble.sendCommandCheckOK(F("AT+GAPSETADVDATA=02-01-06-05-02-0d-18-0a-18"));
 
   /* Reset the device for the new service setting changes to take effect */
   Serial.print(F("Performing a SW reset (service changes require a reset): "));
@@ -158,13 +165,13 @@ void loop(void)
 
   /* Command is sent when \n (\r) or println is called */
   /* AT+GATTCHAR=CharacteristicID,value */
-  ble.print( F("AT+GATTCHAR=") );
-  ble.print( hrmMeasureCharId );
-  ble.print( F(",00-") );
+  ble.print(F("AT+GATTCHAR="));
+  ble.print(hrmMeasureCharId);
+  ble.print(F(",00-"));
   ble.println(heart_rate, HEX);
 
   /* Check if command executed OK */
-  if ( !ble.waitForOK() )
+  if (!ble.waitForOK())
   {
     Serial.println(F("Failed to get response!"));
   }
