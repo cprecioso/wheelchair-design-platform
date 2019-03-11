@@ -47,6 +47,7 @@ Adafruit_BNO055 bno = Adafruit_BNO055(55);
 // GATT service information
 int32_t imuServiceId;
 int32_t orientationCharId;
+int32_t calibrationCharId;
 
 // A small helper
 void error(const __FlashStringHelper *err)
@@ -131,6 +132,17 @@ void setup(void)
   // (needed for Nordic apps to detect the service)
   ble.sendCommandCheckOK(F("AT+GAPSETADVDATA=02-01-06-05-02-0d-18-0a-18"));
 
+  // Add the Calibration characteristic
+  success = ble.sendCommandWithIntReply(F("AT+GATTADDCHAR=UUID128=BE-EF-DE-AD-44-55-66-77-88-99-AA-BB-CC-DD-EE-FF,PROPERTIES=0x10,MIN_LEN=1,MAX_LEN=17,VALUE=\"\""), &calibrationCharId);
+  if (!success)
+  {
+    error(F("Could not add Calibration characteristic."));
+  }
+
+  // Add the Calibration Service to the advertising data
+  // (needed for Nordic apps to detect the service)
+  ble.sendCommandCheckOK(F("AT+GAPSETADVDATA=02-01-06-05-02-0d-18-0a-18"));
+
   // Reset the device for the new service setting changes to take effect
   ble.reset();
 }
@@ -144,6 +156,19 @@ bool isCalibrated()
                                     // and magnetometer
   system = gyro = accel = mag = 0;
   bno.getCalibration(&system, &gyro, &accel, &mag);
+
+  // Command is sent when \n (\r) or println is called
+  // AT+GATTCHAR=CharacteristicID,value
+  ble.print(F("AT+GATTCHAR="));
+  ble.print(calibrationCharId);
+  ble.print(F(","));
+  ble.print(String(system));
+  ble.print(F(","));
+  ble.print(String(gyro));
+  ble.print(F(","));
+  ble.print(String(accel));
+  ble.print(F(","));
+  ble.println(String(mag));
 
   if (gyro >= 2 && mag >= 2)
   {
