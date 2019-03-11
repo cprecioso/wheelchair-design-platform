@@ -135,35 +135,57 @@ void setup(void)
   ble.reset();
 }
 
+bool isCalibrated()
+{
+  /* Get the four calibration values (0..3) */
+  /* Any sensor data reporting 0 should be ignored, */
+  /* 3 means 'fully calibrated" */
+  uint8_t system, gyro, accel, mag; // variable for gyroscope, accelerometer
+                                    // and magnetometer
+  system = gyro = accel = mag = 0;
+  bno.getCalibration(&system, &gyro, &accel, &mag);
+
+  if (gyro >= 2 && mag >= 2)
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
 void orientation()
 {
-  // Get Quaternion data (no 'Gimbal Lock' like with Euler angles)
-  imu::Quaternion quat = bno.getQuat();
-  float quatX = quat.x();
-  float quatY = quat.y();
-  float quatZ = quat.z();
+
+  if (!isCalibrated())
+  {
+    return;
+  }
+
+  sensors_event_t event;
+  bno.getEvent(&event);
+
+  float rotX = event.orientation.x;
+  float rotY = event.orientation.y;
+  float rotZ = event.orientation.z;
 
   // Command is sent when \n (\r) or println is called
   // AT+GATTCHAR=CharacteristicID,value
   ble.print(F("AT+GATTCHAR="));
   ble.print(orientationCharId);
   ble.print(F(","));
-  ble.print(String(quatX));
+  ble.print(String(rotX));
   ble.print(F(","));
-  ble.print(String(quatY));
+  ble.print(String(rotY));
   ble.print(F(","));
-  ble.println(String(quatZ));
-}
-
-void rotation()
-{
+  ble.println(String(rotZ));
 }
 
 void loop(void)
 {
 
   orientation();
-  rotation();
 
   // Check if command executed OK
   if (!ble.waitForOK())
