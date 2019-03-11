@@ -8,5 +8,6 @@ Most people walk in their day-to-day lives. To work, school, to a restaurant wit
 
 Hiking is an enjoyable activity with both physical and mental benefits. Hiking outdoors is a stimulating activity that helps decreasing stress levels and increase creativity and happiness. But we want not for these benefits to be limited by the ability to walk. People who have movement disabilities and are wheelchair-bound nevertheless do have the ability to enjoy journeys through nature. With our project, we want to contribute to **make hiking more enjoyable and safe for these wheelchair-bound people, without the need to be accompanied by an able-bodied person**.
 
-- [**Sensors**](./1-sensors.md)
-- [**Actuators**](./2-actuators.md)
+- [**Sensors**](./assignments/1/sensors.md)
+- [**Actuators**](./assignments/2/actuators.md)
+- [**Assignment 2 explanation**](./assignments/2/explanation.md)
