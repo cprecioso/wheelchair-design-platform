@@ -16,17 +16,16 @@
     Please note the long strings of data sent mean the *RTS* pin is
     required with UART to slow down data sent to the Bluefruit LE!
 */
+
 #include <Arduino.h>
 #include <SPI.h>
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
 #include <utility/imumaths.h>
-#include "Adafruit_BLE.h"
-#include "Adafruit_BluefruitLE_SPI.h"
-#include "Adafruit_BluefruitLE_UART.h"
-
-#include "BluefruitConfig.h"
+#include <Adafruit_BLE.h>
+#include <Adafruit_BluefruitLE_SPI.h>
+#include <Adafruit_BluefruitLE_UART.h>
 
 #if SOFTWARE_SERIAL_AVAILABLE
 #include <SoftwareSerial.h>
