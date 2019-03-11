@@ -18,7 +18,7 @@ reason on the Raspberry Pi, and trigger action on the Arduino Mega.
 ### 1.1 Vibration pattern
 
 Let's start with a look at the vibration motor describe here:
-[Vibration Motor](../resources/actuators/vibration_motor.md)
+[Vibration Motor](../resources/actuators/vibration_motors.md)
 
 Building on the couple of examples we provide, write your own vibration pattern.
 
@@ -133,8 +133,8 @@ We remove the subscription to orientation, which is not necessary in this case. 
 the handler of rotation data so that we check whether we need to nudge the wheelchair user or not.
 
 You can find a complete example in 
-<a href="https://github.com/datacentricdesign/wheelchair-design-platform/blob/master/examples/actuators/vibrate_rotation_excess.py" target="_blank">
-examples/actuators/vibrate_rotation_excess.py</a>
+<a href="https://github.com/datacentricdesign/wheelchair-design-platform/blob/master/examples/actuators/vibration_motors/vibrate_rotation_excess.py" target="_blank">
+examples/actuators/vibration_motors/vibrate_rotation_excess.py</a>
 
 
 ## 2 Internet Status on the Wheel
@@ -153,7 +153,7 @@ depending on the internet status.
 
 The first step is to explore how to wire and control a NeoPixel 5mm Diffused LED.
 This is described in the LED page in section 3:
-[resources/actuators/leds](/resources/actuators/leds#3-neopixel-5mm-diffused-led)
+[/resources/actuators/leds](../resources/actuators/leds.md#3-neopixel-5mm-diffused-led)
 
 ### 2.2 Internet Connection status
 
