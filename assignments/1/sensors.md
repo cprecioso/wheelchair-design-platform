@@ -3,9 +3,9 @@
 <table>
   <thead>
     <tr class="header">
-      <th><p>Sensor</p></th>
-      <th><p>Resulting variable(s)</p></th>
-      <th><p>Possible uses</p></th>
+      <th>Sensor</th>
+      <th>Resulting variable(s)</th>
+      <th>Possible uses</th>
     </tr>
   </thead>
   <tbody>
