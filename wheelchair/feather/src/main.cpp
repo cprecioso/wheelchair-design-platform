@@ -34,7 +34,8 @@
 #define LED_PIN 2
 
 // Create the Bluefruit object for Feather 32u4
-Adafruit_BluefruitLE_SPI ble(BLUEFRUIT_SPI_CS, BLUEFRUIT_SPI_IRQ, BLUEFRUIT_SPI_RST);
+Adafruit_BluefruitLE_SPI ble(BLUEFRUIT_SPI_CS, BLUEFRUIT_SPI_IRQ,
+                             BLUEFRUIT_SPI_RST);
 
 // Create Adafruit GPS
 Adafruit_GPS GPS(&Serial1);
@@ -50,10 +51,8 @@ int32_t calibrationCharId;
 int32_t locationCharId;
 
 // A small helper
-void error(const __FlashStringHelper *err)
-{
-  if (Serial.available())
-  {
+void error(const __FlashStringHelper *err) {
+  if (Serial.available()) {
     Serial.println(err);
   }
   // In any case, turn on the LED to signal the error
@@ -63,10 +62,8 @@ void error(const __FlashStringHelper *err)
 }
 
 // Initializes BNO055 sensor
-void initSensor(void)
-{
-  if (!bno.begin())
-  {
+void initSensor(void) {
+  if (!bno.begin()) {
     error(F("No BNO055 detected. Check your wiring or I2C ADDR!"));
   }
   delay(1000);
@@ -77,18 +74,14 @@ void initSensor(void)
 // off by default!
 boolean usingInterrupt = false;
 
-void useInterrupt(boolean v)
-{
-  if (v)
-  {
+void useInterrupt(boolean v) {
+  if (v) {
     // Timer0 is already used for millis() - we'll just interrupt somewhere
     // in the middle and call the "Compare A" function above
     OCR0A = 0xAF;
     TIMSK0 |= _BV(OCIE0A);
     usingInterrupt = true;
-  }
-  else
-  {
+  } else {
     // do not call the interrupt function COMPA anymore
     TIMSK0 &= ~_BV(OCIE0A);
     usingInterrupt = false;
@@ -96,8 +89,7 @@ void useInterrupt(boolean v)
 }
 
 // Initializes GPS
-void initGPS(void)
-{
+void initGPS(void) {
   // 9600 NMEA is the default baud rate for Adafruit MTK GPS's- some use 4800
   GPS.begin(9600);
 
@@ -105,9 +97,9 @@ void initGPS(void)
   GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCONLY);
 
   // Set the update rate
-  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_200_MILLIHERTZ); // 200 MHz update rate
-  // For the parsing code to work nicely and have time to sort through the data, and
-  // print it out using anything higher than 1 Hz is not suggested
+  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_200_MILLIHERTZ);  // 200 MHz update rate
+  // For the parsing code to work nicely and have time to sort through the data,
+  // and print it out using anything higher than 1 Hz is not suggested
 
   delay(1000);
   // Ask for firmware version
@@ -119,19 +111,18 @@ void initGPS(void)
   useInterrupt(true);
 }
 
-void initBluetooth()
-{
+void initBluetooth() {
   boolean success;
 
   // Initialise the module
-  if (!ble.begin(VERBOSE_MODE))
-  {
-    error(F("Couldn't find Bluefruit, make sure it's in CoMmanD mode & check wiring."));
+  if (!ble.begin(VERBOSE_MODE)) {
+    error(
+        F("Couldn't find Bluefruit, make sure it's in CoMmanD mode & check "
+          "wiring."));
   }
 
   // Perform a factory reset to make sure everything is in a known state
-  if (!ble.factoryReset())
-  {
+  if (!ble.factoryReset()) {
     error(F("Couldn't factory reset."));
   }
 
@@ -143,22 +134,25 @@ void initBluetooth()
   ble.verbose(true);
 
   // Change the device name to fit its purpose
-  if (!ble.sendCommandCheckOK(F("AT+GAPDEVNAME=NaturelyBT")))
-  {
+  if (!ble.sendCommandCheckOK(F("AT+GAPDEVNAME=NaturelyBT"))) {
     error(F("Could not set device name."));
   }
 
   // Add the IMU Service definition
-  success = ble.sendCommandWithIntReply(F("AT+GATTADDSERVICE=UUID128=DE-AD-BE-EF-44-55-66-77-88-99-AA-BB-CC-DD-EE-FF"), &imuServiceId);
-  if (!success)
-  {
+  success =
+      ble.sendCommandWithIntReply(F("AT+GATTADDSERVICE=UUID128=DE-AD-BE-EF-44-"
+                                    "55-66-77-88-99-AA-BB-CC-DD-EE-FF"),
+                                  &imuServiceId);
+  if (!success) {
     error(F("Could not add Orientation service."));
   }
 
   // Add the Orientation characteristic
-  success = ble.sendCommandWithIntReply(F("AT+GATTADDCHAR=UUID128=DE-AD-BE-EF-44-55-66-77-88-99-AA-BB-CC-DD-EE-FF,PROPERTIES=0x10,MIN_LEN=1,MAX_LEN=17,VALUE=\"\""), &orientationCharId);
-  if (!success)
-  {
+  success = ble.sendCommandWithIntReply(
+      F("AT+GATTADDCHAR=UUID128=DE-AD-BE-EF-44-55-66-77-88-99-AA-BB-CC-DD-EE-"
+        "FF,PROPERTIES=0x10,MIN_LEN=1,MAX_LEN=17,VALUE=\"\""),
+      &orientationCharId);
+  if (!success) {
     error(F("Could not add Orientation characteristic."));
   }
 
@@ -167,9 +161,11 @@ void initBluetooth()
   ble.sendCommandCheckOK(F("AT+GAPSETADVDATA=02-01-06-05-02-0d-18-0a-18"));
 
   // Add the Calibration characteristic
-  success = ble.sendCommandWithIntReply(F("AT+GATTADDCHAR=UUID128=BE-EF-DE-AD-44-55-66-77-88-99-AA-BB-CC-DD-EE-FF,PROPERTIES=0x10,MIN_LEN=1,MAX_LEN=17,VALUE=\"\""), &calibrationCharId);
-  if (!success)
-  {
+  success = ble.sendCommandWithIntReply(
+      F("AT+GATTADDCHAR=UUID128=BE-EF-DE-AD-44-55-66-77-88-99-AA-BB-CC-DD-EE-"
+        "FF,PROPERTIES=0x10,MIN_LEN=1,MAX_LEN=17,VALUE=\"\""),
+      &calibrationCharId);
+  if (!success) {
     error(F("Could not add Calibration characteristic."));
   }
 
@@ -178,9 +174,11 @@ void initBluetooth()
   ble.sendCommandCheckOK(F("AT+GAPSETADVDATA=02-01-06-05-02-0d-18-0a-18"));
 
   // Add the Location characteristic
-  success = ble.sendCommandWithIntReply(F("AT+GATTADDCHAR=UUID128=BF-EF-DE-AD-44-57-66-77-88-A9-AA-BB-CC-DD-EE-FF,PROPERTIES=0x10,MIN_LEN=1,MAX_LEN=17,VALUE=\"\""), &locationCharId);
-  if (!success)
-  {
+  success = ble.sendCommandWithIntReply(
+      F("AT+GATTADDCHAR=UUID128=BF-EF-DE-AD-44-57-66-77-88-A9-AA-BB-CC-DD-EE-"
+        "FF,PROPERTIES=0x10,MIN_LEN=1,MAX_LEN=17,VALUE=\"\""),
+      &locationCharId);
+  if (!success) {
     error(F("Could not add Location characteristic."));
   }
 
@@ -194,8 +192,7 @@ void initBluetooth()
 
 // Sets up the HW an the BLE module (this function is called
 // automatically on startup)
-void setup(void)
-{
+void setup(void) {
   delay(500);
 
   // Set LED error flag
@@ -216,18 +213,14 @@ void setup(void)
 
 // Interrupt is called once a millisecond, looks for any new GPS data, and
 // stores it
-SIGNAL(TIMER0_COMPA_vect)
-{
-  char c = GPS.read();
-}
+SIGNAL(TIMER0_COMPA_vect) { char c = GPS.read(); }
 
-bool isCalibrated()
-{
+bool isCalibrated() {
   /* Get the four calibration values (0..3) */
   /* Any sensor data reporting 0 should be ignored, */
   /* 3 means 'fully calibrated" */
-  uint8_t system, gyro, accel, mag; // variable for gyroscope, accelerometer
-                                    // and magnetometer
+  uint8_t system, gyro, accel, mag;  // variable for gyroscope, accelerometer
+                                     // and magnetometer
   system = gyro = accel = mag = 0;
   bno.getCalibration(&system, &gyro, &accel, &mag);
 
@@ -244,21 +237,15 @@ bool isCalibrated()
   ble.print(F(","));
   ble.println(String(mag));
 
-  if (gyro >= 2 && mag >= 2)
-  {
+  if (gyro >= 2 && mag >= 2) {
     return true;
-  }
-  else
-  {
+  } else {
     return false;
   }
 }
 
-void orientation()
-{
-
-  if (!isCalibrated())
-  {
+void orientation() {
+  if (!isCalibrated()) {
     return;
   }
 
@@ -281,19 +268,19 @@ void orientation()
   ble.println(String(rotZ));
 }
 
-void location()
-{
-
+void location() {
   // if a sentence is received, we can check the checksum, and then parse it...
-  if (GPS.newNMEAreceived())
-  {
+  if (GPS.newNMEAreceived()) {
     // If we print the NMEA sentence, or data
     // we end up not listening and catching other sentences!
     // so be very wary if using OUTPUT_ALLDATA and trying to print out data
-    //Serial.println(GPS.lastNMEA());   // this also sets the newNMEAreceived() flag to false
+    // Serial.println(GPS.lastNMEA());   // this also sets the newNMEAreceived()
+    // flag to false
 
-    if (!GPS.parse(GPS.lastNMEA())) // this also sets the newNMEAreceived() flag to false
-      return;                       // we can fail to parse a sentence in which case we should just wait for another
+    if (!GPS.parse(GPS.lastNMEA()))  // this also sets the newNMEAreceived()
+                                     // flag to false
+      return;  // we can fail to parse a sentence in which case we should just
+               // wait for another
 
     // if (!GPS.fix) return
 
@@ -308,15 +295,12 @@ void location()
   }
 }
 
-void loop(void)
-{
-
+void loop(void) {
   orientation();
   location();
 
   // Check if command executed OK
-  if (!ble.waitForOK())
-  {
+  if (!ble.waitForOK()) {
     error(F("Failed to get response!"));
   }
 
