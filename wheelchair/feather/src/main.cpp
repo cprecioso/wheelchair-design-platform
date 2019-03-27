@@ -119,30 +119,15 @@ void initGPS(void)
   useInterrupt(true);
 }
 
-// Sets up the HW an the BLE module (this function is called
-// automatically on startup)
-void setup(void)
+void initBluetooth()
 {
-  delay(500);
   boolean success;
-
-  // Set LED error flag
-
-  pinMode(LED_PIN, OUTPUT);
-  analogWrite(LED_PIN, LOW);
-  Serial.begin(115200);
 
   // Initialise the module
   if (!ble.begin(VERBOSE_MODE))
   {
     error(F("Couldn't find Bluefruit, make sure it's in CoMmanD mode & check wiring."));
   }
-
-  // Setup the BNO055 sensor
-  initSensor();
-
-  // Setup the GPS
-  initGPS();
 
   // Perform a factory reset to make sure everything is in a known state
   if (!ble.factoryReset())
@@ -205,6 +190,28 @@ void setup(void)
 
   // Reset the device for the new service setting changes to take effect
   ble.reset();
+}
+
+// Sets up the HW an the BLE module (this function is called
+// automatically on startup)
+void setup(void)
+{
+  delay(500);
+
+  // Set LED error flag
+
+  pinMode(LED_PIN, OUTPUT);
+  analogWrite(LED_PIN, LOW);
+  Serial.begin(115200);
+
+  // Setup the BNO055 sensor
+  initSensor();
+
+  // Setup the GPS
+  initGPS();
+
+  // Setup the Bluetooth
+  initBluetooth();
 }
 
 // Interrupt is called once a millisecond, looks for any new GPS data, and
