@@ -282,7 +282,7 @@ void location() {
       return;  // we can fail to parse a sentence in which case we should just
                // wait for another
 
-    // if (!GPS.fix) return
+    if (!GPS.fix) return;
 
     // Command is sent when \n (\r) or println is called
     // AT+GATTCHAR=CharacteristicID,value
