@@ -28,10 +28,6 @@
 #include <Adafruit_BluefruitLE_UART.h>
 #include <Adafruit_GPS.h>
 
-#if SOFTWARE_SERIAL_AVAILABLE
-#include <SoftwareSerial.h>
-#endif
-
 #include "BluefruitConfig.h"
 
 // LED error flag
