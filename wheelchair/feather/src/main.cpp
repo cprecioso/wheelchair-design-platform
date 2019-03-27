@@ -78,7 +78,8 @@ void initSensor(void)
 }
 
 // Initializes GPS
-void initGPS(void) {
+void initGPS(void)
+{
   // 9600 NMEA is the default baud rate for Adafruit MTK GPS's- some use 4800
   GPS.begin(9600);
 
@@ -86,7 +87,7 @@ void initGPS(void) {
   GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCONLY);
 
   // Set the update rate
-  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_200_MILLIHERTZ);   // 200 MHz update rate
+  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_200_MILLIHERTZ); // 200 MHz update rate
   // For the parsing code to work nicely and have time to sort through the data, and
   // print it out using anything higher than 1 Hz is not suggested
 
@@ -243,28 +244,31 @@ void orientation()
   ble.println(String(rotZ));
 }
 
-
 uint32_t locationTimer = millis();
-void location() {
+void location()
+{
   // read data from the GPS in the 'main loop'
   GPS.read();
 
   // if a sentence is received, we can check the checksum, and then parse it...
-  if (GPS.newNMEAreceived()) {
+  if (GPS.newNMEAreceived())
+  {
     // If we print the NMEA sentence, or data
     // we end up not listening and catching other sentences!
     // so be very wary if using OUTPUT_ALLDATA and trying to print out data
     //Serial.println(GPS.lastNMEA());   // this also sets the newNMEAreceived() flag to false
 
-    if (!GPS.parse(GPS.lastNMEA()))   // this also sets the newNMEAreceived() flag to false
-      return;  // we can fail to parse a sentence in which case we should just wait for another
+    if (!GPS.parse(GPS.lastNMEA())) // this also sets the newNMEAreceived() flag to false
+      return;                       // we can fail to parse a sentence in which case we should just wait for another
   }
 
   // if millis() or timer wraps around, we'll just reset it
-  if (locationTimer > millis())  locationTimer = millis();
+  if (locationTimer > millis())
+    locationTimer = millis();
 
   // approximately every 2 seconds or so, print out the current GPS stats
-  if (millis() - locationTimer > 5000) {
+  if (millis() - locationTimer > 5000)
+  {
     locationTimer = millis();
 
     // if (!GPS.fix) return
