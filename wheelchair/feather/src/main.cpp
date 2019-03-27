@@ -77,6 +77,28 @@ void initSensor(void)
   bno.setExtCrystalUse(true);
 }
 
+// Keeps track of whether we're using the interrupt
+// off by default!
+boolean usingInterrupt = false;
+
+void useInterrupt(boolean v)
+{
+  if (v)
+  {
+    // Timer0 is already used for millis() - we'll just interrupt somewhere
+    // in the middle and call the "Compare A" function above
+    OCR0A = 0xAF;
+    TIMSK0 |= _BV(OCIE0A);
+    usingInterrupt = true;
+  }
+  else
+  {
+    // do not call the interrupt function COMPA anymore
+    TIMSK0 &= ~_BV(OCIE0A);
+    usingInterrupt = false;
+  }
+}
+
 // Initializes GPS
 void initGPS(void)
 {
@@ -94,6 +116,11 @@ void initGPS(void)
   delay(1000);
   // Ask for firmware version
   Serial1.println(PMTK_Q_RELEASE);
+
+  // This code can have a timer0 interrupt go off
+  // every 1 millisecond, and read data from the GPS. That makes the
+  // loop code  a lot easier!
+  useInterrupt(true);
 }
 
 // Sets up the HW an the BLE module (this function is called
@@ -184,6 +211,13 @@ void setup(void)
   ble.reset();
 }
 
+// Interrupt is called once a millisecond, looks for any new GPS data, and
+// stores it
+SIGNAL(TIMER0_COMPA_vect)
+{
+  char c = GPS.read();
+}
+
 bool isCalibrated()
 {
   /* Get the four calibration values (0..3) */
@@ -244,11 +278,8 @@ void orientation()
   ble.println(String(rotZ));
 }
 
-uint32_t locationTimer = millis();
 void location()
 {
-  // read data from the GPS in the 'main loop'
-  GPS.read();
 
   // if a sentence is received, we can check the checksum, and then parse it...
   if (GPS.newNMEAreceived())
@@ -260,16 +291,6 @@ void location()
 
     if (!GPS.parse(GPS.lastNMEA())) // this also sets the newNMEAreceived() flag to false
       return;                       // we can fail to parse a sentence in which case we should just wait for another
-  }
-
-  // if millis() or timer wraps around, we'll just reset it
-  if (locationTimer > millis())
-    locationTimer = millis();
-
-  // approximately every 2 seconds or so, print out the current GPS stats
-  if (millis() - locationTimer > 5000)
-  {
-    locationTimer = millis();
 
     // if (!GPS.fix) return
 
