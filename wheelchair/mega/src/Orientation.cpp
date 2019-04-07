@@ -32,7 +32,7 @@ bool isCalibrated() {
   messenger.sendCmdArg(mag);
   messenger.sendCmdEnd();
 
-  if (gyro >= 2 && mag >= 2) {
+  if (gyro >= 2) {
     return true;
   } else {
     return false;
