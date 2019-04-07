@@ -3,7 +3,7 @@ import signal  # To catch the Ctrl+C and end the program properly
 
 from dotenv import load_dotenv
 
-# import feather
+import feather
 import mega
 
 # The thing ID and access token
@@ -11,18 +11,18 @@ load_dotenv()
 
 
 def setup():
-    # feather.setup()
+    feather.setup()
     mega.setup()
 
 
 def loop():
-    # feather.loop()
+    feather.loop()
     mega.loop()
 
 
 def close():
-    # feather.exit()
-    mega.exit()
+    feather.close()
+    mega.close()
 
 
 setup()

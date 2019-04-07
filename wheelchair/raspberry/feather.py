@@ -14,12 +14,12 @@ feather = bleAdapter.connect(
     BLUETOOTH_DEVICE_MAC, address_type=pygatt.BLEAddressType.random)
 
 
+def handle_heart_rate(handle: int, value_bytes: bytearray):
+    value = int.from_bytes(value_bytes, byteorder="little")
+    upload(Property.HeartRate, [value])
+
+
 def setup():
-
-    def handle_heart_rate(handle: int, value_bytes: bytearray):
-        value = int.from_bytes(value_bytes, byteorder="little")
-        upload(Property.HeartRate, [value])
-
     feather.subscribe(GATT_CHARACTERISTIC, callback=handle_heart_rate)
 
 

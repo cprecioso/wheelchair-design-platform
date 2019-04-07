@@ -11,5 +11,15 @@ serial = Serial(
 
 SEMICOLON = ";".encode("ascii")
 
-Message = IntEnum(
-    "Message", "kAcknowledge kError kStatus kGPS kOrientation kCalibration kServo kInnerLight kOuterLight", start=0)
+
+class Message(IntEnum):
+    kAcknowledge = 0
+    kError = 1
+    kStatus = 2
+    kGPS = 3
+    kOrientation = 4
+    kCalibration = 5
+    kServo = 6
+    kInnerLight = 7
+    kOuterLight = 8
+
