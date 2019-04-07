@@ -23,6 +23,7 @@
 #include <Adafruit_BluefruitLE_UART.h>
 
 #include "BluefruitConfig.h"
+#include "Configuration.h"
 
 // LED error flag
 #define LED_PIN 2
@@ -76,23 +77,21 @@ void initBluetooth() {
   ble.verbose(true);
 
   // Change the device name to fit its purpose
-  if (!ble.sendCommandCheckOK(F("AT+GAPDEVNAME=NaturelyBT"))) {
+  if (!ble.sendCommandCheckOK(F("AT+GAPDEVNAME=" BLE_NAME))) {
     error(F("Could not set device name."));
   }
 
   // Add the IMU Service definition
-  success =
-      ble.sendCommandWithIntReply(F("AT+GATTADDSERVICE=UUID128=DE-AD-BE-EF-44-"
-                                    "55-66-77-88-99-AA-BB-CC-DD-EE-FF"),
-                                  &imuServiceId);
+  success = ble.sendCommandWithIntReply(
+      F("AT+GATTADDSERVICE=UUID128=" BLE_SERVICE), &imuServiceId);
   if (!success) {
     error(F("Could not add Heart Rate service."));
   }
 
   // Add the Orientation characteristic
   success = ble.sendCommandWithIntReply(
-      F("AT+GATTADDCHAR=UUID128=DE-AD-BE-EF-44-55-66-77-88-99-AA-BB-CC-DD-EE-"
-        "FF,PROPERTIES=0x10,MIN_LEN=1,MAX_LEN=17,VALUE=\"\""),
+      F("AT+GATTADDCHAR=UUID128=" BLE_CHARACTERISTIC
+        ",PROPERTIES=0x10,MIN_LEN=1,MAX_LEN=17,VALUE=\"\""),
       &heartRateCharId);
   if (!success) {
     error(F("Could not add Heart Rate characteristic."));
@@ -132,7 +131,7 @@ void loop(void) {
   currentValue = (currentValue + 1) % numValues;
 
   static auto lastTime = millis();
-  if (millis() - lastTime >= 1000) {
+  if (millis() - lastTime >= BLE_SAMPLE_RATE_MS) {
     lastTime = millis();
 
     int average = 0;
@@ -151,5 +150,5 @@ void loop(void) {
   }
 
   // Delay before next measurement update
-  delay(delayMs);
+  delay(SENSOR_SAMPLE_RATE_MS);
 }
