@@ -1,6 +1,8 @@
 import os
 import signal
+from random import randint
 
+import output
 from hub import Property, upload
 from internal_serial import SEMICOLON, Message, serial
 
@@ -30,6 +32,8 @@ def loop():
             lat = float(args[0])
             lon = float(args[1])
             upload(Property.Location, [lat, lon])
+            direction = output.Direction(randint(0, 3))
+            output.show_direction(direction)
         elif messageId == Message.kCalibration:
             sys = int(args[0])
             gyro = int(args[1])
@@ -41,6 +45,7 @@ def loop():
             y = float(args[1])
             z = float(args[2])
             upload(Property.Orientation, [x, y, z])
+            output.show_direction(x)
         else:
             print("unknown!", messageId, args)
 

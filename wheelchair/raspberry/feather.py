@@ -2,6 +2,7 @@ import os
 
 import pygatt
 
+import output
 from hub import Property, upload
 
 BLUETOOTH_DEVICE_MAC = os.environ['BLUETOOTH_DEVICE_MAC']
@@ -17,6 +18,7 @@ feather = bleAdapter.connect(
 def handle_heart_rate(handle: int, value_bytes: bytearray):
     value = int.from_bytes(value_bytes, byteorder="little")
     upload(Property.HeartRate, [value])
+    output.show_heart_rate(value)
 
 
 def setup():

@@ -23,3 +23,6 @@ class Message(IntEnum):
     kInnerLight = 7
     kOuterLight = 8
 
+
+def sendCommand(args: bytearray):
+    serial.write(((",".join([str(x) for x in args])) + ";\n").encode("ascii"))
