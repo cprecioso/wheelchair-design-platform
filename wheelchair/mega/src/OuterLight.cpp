@@ -7,11 +7,12 @@ const auto numPixels = 16;
 CRGBArray<numPixels> leds;
 
 const auto low = CRGB(0, 0, 0);
-const auto mid = CRGB(0, 0, 10);
-const auto high = CRGB(60, 60, 100);
+const auto mid = CRGB(0, 0, 100);
+const auto high = CRGB(0, 0, 255);
 
 void setup() {
   FastLED.addLeds<NEOPIXEL, pin>(leds, numPixels);
+  leds.fill_solid(low);
   FastLED.show();
 }
 
