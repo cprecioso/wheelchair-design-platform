@@ -4,3 +4,4 @@ python-dotenv
 pyserial
 requests
 pygatt
+pexpect
