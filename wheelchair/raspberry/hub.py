@@ -3,10 +3,8 @@ from enum import Enum
 
 from dcd.entities.property import PropertyType
 from dcd.entities.thing import Thing
-from dotenv import load_dotenv
 
 # The thing ID and access token
-load_dotenv()
 THING_ID = os.environ['THING_ID']
 THING_TOKEN = os.environ['THING_TOKEN']
 

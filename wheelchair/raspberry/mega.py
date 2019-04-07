@@ -2,9 +2,14 @@ import os
 import signal
 
 from hub import Property, upload
-from mega_serial import SEMICOLON, Message, serial
+from internal_serial import SEMICOLON, Message, serial
 
-while True:
+
+def setup():
+    None
+
+
+def loop():
     # Read one line
     raw_line_bytes: bytes = serial.read_until(SEMICOLON)
     line_bytes: bytes = raw_line_bytes.strip().strip(SEMICOLON)
@@ -38,3 +43,7 @@ while True:
             upload(Property.Orientation, [x, y, z])
         else:
             print("unknown!", messageId, args)
+
+
+def close():
+    serial.close()
