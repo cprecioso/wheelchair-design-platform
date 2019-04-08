@@ -1,7 +1,10 @@
 import os
 from enum import IntEnum
 
+from dotenv import load_dotenv
 from serial import Serial
+
+load_dotenv()
 
 # Start reading the serial port
 serial = Serial(

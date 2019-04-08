@@ -1,9 +1,12 @@
 import os
 
 import pygatt
+from dotenv import load_dotenv
 
 import output
 from hub import Property, upload
+
+load_dotenv()
 
 BLUETOOTH_DEVICE_MAC = os.environ['BLUETOOTH_DEVICE_MAC']
 GATT_CHARACTERISTIC = "DEADBEEF-4455-6677-8899-AABBCCDDEEFF"
