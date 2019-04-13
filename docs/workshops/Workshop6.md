@@ -1,1 +1,0 @@
-# Workshop 6: Developing a Product analytics Dashboard
