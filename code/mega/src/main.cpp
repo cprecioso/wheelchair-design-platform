@@ -14,9 +14,11 @@ void setup(void) {
   messenger.printLfCr();
   messenger.sendCmd(kStatus, "Start!");
 
+  // Setup sensors
   Orientation::setup();
   GPS::setup();
 
+  // Setup each actuator and the command the will be responding to
   ServoMotor::setup();
   messenger.attach(kServo, [] {
     const auto angle = messenger.readInt16Arg();

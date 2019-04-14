@@ -14,6 +14,8 @@ serial = Serial(
 
 SEMICOLON = ";".encode("ascii")
 
+# Copied from Mega's Messenger.h
+
 
 class Message(IntEnum):
     kAcknowledge = 0

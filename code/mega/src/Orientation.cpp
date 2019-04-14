@@ -51,7 +51,6 @@ void loop() {
   sensors_event_t event;
   bno.getEvent(&event);
 
-  // Command is sent when \n (\r) or println is called
   messenger.sendCmdStart(kOrientation);
   messenger.sendCmdArg(event.orientation.x);
   messenger.sendCmdArg(event.orientation.y);

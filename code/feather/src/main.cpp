@@ -1,21 +1,4 @@
-/*********************************************************************
-  This is an example for our nRF51822 based Bluefruit LE modules
-
-  Pick one up today in the adafruit shop!
-
-  Adafruit invests time and resources providing this open source code,
-  please support Adafruit and open-source hardware by purchasing
-  products from Adafruit!
-
-  MIT license, check LICENSE for more information
-  All text above, and the splash screen below must be included in
-  any redistribution
-*********************************************************************/
-
-/*
-    Please note the long strings of data sent mean the *RTS* pin is
-    required with UART to slow down data sent to the Bluefruit LE!
-*/
+// Based on the Adafruit Feather example
 
 #include <Arduino.h>
 #include <Adafruit_BLE.h>
@@ -123,6 +106,7 @@ void setup(void) {
 void loop(void) {
   int heartRate = analogRead(heartSensorPin);
 
+  // We store the last 10 values, and overwrite the oldest ones (round-robin)
   static const int numValues = 10;
   static int lastValues[numValues];
   static int currentValue = 0;
@@ -134,10 +118,14 @@ void loop(void) {
   if (millis() - lastTime >= BLE_SAMPLE_RATE_MS) {
     lastTime = millis();
 
+    // Average the last 10 values.
+    // This gives us better resilience against suddent jumps that usually
+    // happen.
     int average = 0;
     for (int i = 0; i < numValues; i++) average += lastValues[i];
     average /= numValues;
 
+    // Write it to the BLE characteristic
     ble.print(F("AT+GATTCHAR="));
     ble.print(heartRateCharId);
     ble.print(F(","));

@@ -1,0 +1,8 @@
+# Actuators
+
+| Actuator                     | Implemented? (click on the links to see the implementation file)             | Possible uses                                                                                                                                                 |
+| ---------------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| LCD Display                  | No, [implemented as 16-led ring](code/mega/src/OuterLight.cpp)               | Visualize direction arrows: straight / left / right / stop / turn back                                                                                        |
+| RGB Led                      | No, [implemented as 12-led ring](code/mega/src/InnerLight.cpp)               | Show the current state of the user in the [cardio chart](https://customercare.geonaute.com/hc/en-gb/articles/205822622-WHAT-DO-THE-COLOUR-CARDIO-ZONES-MEAN-) |
+| 2 continuous rotation servos | No, [implemented as a single indicative servo](code/mega/src/ServoMotor.cpp) | Compensate extreme inclinations through a counterweight system                                                                                                |
+| GSM Antenna                  | No                                                                           | Automatically call emergency services when falls are detected, or the user requests it                                                                        |

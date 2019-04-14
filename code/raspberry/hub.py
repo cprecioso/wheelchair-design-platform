@@ -19,6 +19,8 @@ db = Thing(thing_id=THING_ID, token=THING_TOKEN)
 # i.e. retrieving its information from the hub
 db.read()
 
+# Copied from the DCD hub
+
 
 class Property(Enum):
     Location = "location-512c"

@@ -8,4 +8,4 @@ It has not decision-making and instead relies on the information sent and receiv
 
     [message id],[arg 1],[arg 2],...,[arg n];
 
-The message codes are available at [`Messenger.h`](./src/Messenger.h), and the code responsible for every peripheral is in a differente file, with the [`main.cpp`](./src/main.cpp) file calling each as needed.
+The message codes are available at [`Messenger.h`](./src/Messenger.h), and the code responsible for every peripheral is in a differente file, with the [`main.cpp`](./src/main.cpp) file calling each as needed. We use C++ namespaces to organize code to split it between different files.
